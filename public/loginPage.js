@@ -3,25 +3,25 @@
 const userForm = new UserForm();
 
 userForm.loginFormCallback = data => {
-  ApiConnector.login(data, callback => {
-    console.log(callback);
-    if (callback.success) {
+  ApiConnector.login(data, response => {
+    console.log(response);
+    if (response.success) {
       location.reload();
     } else {
-      console.log(callback.data);
-      userForm.setLoginErrorMessage(callback.data);
+      console.log(response.data);
+      userForm.setLoginErrorMessage(response.data);
     }
   });
 };
 
 userForm.registerFormCallback = data => {
-  ApiConnector.register(data, callback => {
-    console.log(callback);
-    if (callback.success) {
+  ApiConnector.register(data, response => {
+    console.log(response);
+    if (response.success) {
       location.reload();
     } else {
-      console.log(callback.data);
-      userForm.setRegisterErrorMessage(callback.data);
+      console.log(response.data);
+      userForm.setRegisterErrorMessage(response.data);
     }
   });
 };
