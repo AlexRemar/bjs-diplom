@@ -29,6 +29,7 @@ requestRates();
 setInterval(requestRates, 60000);
 
 const moneyManager = new MoneyManager();
+
 moneyManager.addMoneyCallback = (data) => {
     ApiConnector.addMoney(data, response => {
         if(response.success){
@@ -54,7 +55,6 @@ moneyManager.conversionMoneyCallback = (data) => {
 moneyManager.sendMoneyCallback = (data) => {
     ApiConnector.transferMoney(data, response => {
         if (response.success) {
-            moneyManager.updateUsersList(response.data);
             ProfileWidget.showProfile(response.data);
             moneyManager.setMessage(response.success, `Перевод ${data.amount} ${data.currency} пользователю id${data.to} выполнено успешно`);      
           } else {      
@@ -64,11 +64,12 @@ moneyManager.sendMoneyCallback = (data) => {
 };
 
 const favoritesWidget = new FavoritesWidget();
+
     ApiConnector.getFavorites(response => {
         if(response.success){
             favoritesWidget.clearTable();
             favoritesWidget.fillTable(response.data);
-            favoritesWidget.updateUsersList(response.data)
+            moneyManager.updateUsersList(response.data)
         };
     });
 
@@ -78,7 +79,7 @@ favoritesWidget.addUserCallback = (data) => {
         if (response.success){
             favoritesWidget.clearTable();
             favoritesWidget.fillTable(response.data);
-            favoritesWidget.updateUsersList(response.data)
+            moneyManager.updateUsersList(response.data)
             favoritesWidget.setMessage(response.success, `Пользователь ${data.name}(id:${data.id}) успешно добавлен в избранное`);
         } else {
             favoritesWidget.setMessage(response.success, response.error);
@@ -91,7 +92,7 @@ favoritesWidget.removeUserCallback = (id) => {
         if (response.success){
             favoritesWidget.clearTable();
             favoritesWidget.fillTable(response.data);
-            favoritesWidget.updateUsersList(response.data)
+            moneyManager.updateUsersList(response.data)
             favoritesWidget.setMessage(response.success, `Пользователь id:${id} успешно удален из избранного`);
         } else {
             favoritesWidget.setMessage(response.success, response.error);
