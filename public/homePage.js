@@ -35,7 +35,7 @@ moneyManager.addMoneyCallback = (data) => {
             ProfileWidget.showProfile(response.data);
             moneyManager.setMessage(response.success, `Баланс успешно пополнен на ${data.amount}${data.currency}`);
         } else {
-            moneyManager.setMessage(!response.success, "Ошибка пополнения баланса");
+            moneyManager.setMessage(response.success, response.error);
         }
     });
 };
@@ -46,7 +46,7 @@ moneyManager.conversionMoneyCallback = (data) => {
             ProfileWidget.showProfile(response.data);
             moneyManager.setMessage(response.success, `Конвертирование ${data.fromAmount} ${data.fromCurrency} в ${data.targetCurrency} выполнено успешно`);      
         } else {      
-            moneyManager.setMessage(!response.success, "Произошла ошибка в конвертировании валют");
+            moneyManager.setMessage(response.success, response.error);
         }
     });
 };
@@ -54,10 +54,11 @@ moneyManager.conversionMoneyCallback = (data) => {
 moneyManager.sendMoneyCallback = (data) => {
     ApiConnector.transferMoney(data, response => {
         if (response.success) {
+            moneyManager.updateUsersList(response.data);
             ProfileWidget.showProfile(response.data);
             moneyManager.setMessage(response.success, `Перевод ${data.amount} ${data.currency} пользователю id${data.to} выполнено успешно`);      
           } else {      
-            moneyManager.setMessage(!response.success, "Произошла ошибка, перевод не выполнен");
+            moneyManager.setMessage(response.success, response.error);
           }
     });
 };
@@ -80,7 +81,7 @@ favoritesWidget.addUserCallback = (data) => {
             favoritesWidget.updateUsersList(response.data)
             favoritesWidget.setMessage(response.success, `Пользователь ${data.name}(id:${data.id}) успешно добавлен в избранное`);
         } else {
-            favoritesWidget.setMessage(!callback.success, "Произошла ошибка. Пользователь не добавлен в избранное");
+            favoritesWidget.setMessage(response.success, response.error);
         }
 });
 }
@@ -93,7 +94,7 @@ favoritesWidget.removeUserCallback = (id) => {
             favoritesWidget.updateUsersList(response.data)
             favoritesWidget.setMessage(response.success, `Пользователь id:${id} успешно удален из избранного`);
         } else {
-            favoritesWidget.setMessage(!callback.success, "Произошла ошибка. Пользователь не удален");
+            favoritesWidget.setMessage(response.success, response.error);
         }
     });
 }
